@@ -4,13 +4,12 @@ import {Box, Button, Flex, Grid, Heading, chakra} from '@chakra-ui/core';
 import {FiPlus} from 'react-icons/fi';
 import {Helmet} from 'react-helmet';
 
-mapboxgl.accessToken = process.env.GATSBY_MAPBOX_ACCESS_TOKEN;
-
 export default function App() {
   const map = useRef();
   const mapContainer = useRef();
 
   useEffect(() => {
+    mapboxgl.accessToken = process.env.GATSBY_MAPBOX_ACCESS_TOKEN;
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
