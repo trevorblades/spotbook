@@ -20,7 +20,7 @@ export default function App() {
 
   return (
     <>
-      <Helmet title="Spotbook">
+      <Helmet title="Spothub">
         <link
           rel="icon"
           href="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/237/round-pushpin_1f4cd.png"
@@ -38,7 +38,7 @@ export default function App() {
           zIndex="docked"
         >
           <Flex align="center" as="header" h="12" px="4">
-            <Heading fontSize="2xl">📍 Spotbook</Heading>
+            <Heading fontSize="2xl">📍 Spothub</Heading>
             <Button
               ml="auto"
               size="sm"
