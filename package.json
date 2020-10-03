@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "@chakra-ui/core": "^1.0.0-rc.5",
+    "gatsby": "^2.24.67",
+    "gatsby-plugin-chakra-ui": "^1.0.0-rc.5",
+    "gatsby-plugin-react-helmet": "^3.3.12",
+    "mapbox-gl": "^1.12.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-helmet": "^6.1.0",
+    "react-icons": "^3.11.0"
+  },
+  "devDependencies": {
+    "@trevorblades/eslint-config": "^7.2.1",
+    "eslint": "^7.10.0"
+  },
+  "eslintConfig": {
+    "extends": "@trevorblades/eslint-config/react"
+  },
+  "scripts": {
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve"
+  }
+}
