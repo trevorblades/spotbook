@@ -4,12 +4,12 @@ import querystring from 'querystring';
 import {Box, List, ListItem, Spinner, Text, chakra} from '@chakra-ui/core';
 import {useDebounce} from 'use-debounce';
 
-export default function SearchInput({setResult}) {
+export default function SearchInput({setFeature}) {
   const input = useRef();
   const [value, setValue] = useState('');
   const [focus, setFocus] = useState(false);
   const [searching, setSearching] = useState(false);
-  const [results, setResults] = useState([]);
+  const [features, setFeatures] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [debounced] = useDebounce(value, 500);
 
@@ -28,17 +28,17 @@ export default function SearchInput({setResult}) {
         .then(response => response.json())
         .then(data => {
           setSearching(false);
-          setResults(data.features);
+          setFeatures(data.features);
           setSelectedIndex(0);
         });
     } else {
-      setResults([]);
+      setFeatures([]);
     }
   }, [debounced]);
 
-  function selectResult(result) {
-    setValue(result.text);
-    setResult(result);
+  function selectFeature(feature) {
+    setValue(feature.text);
+    setFeature(feature);
     input.current.blur();
   }
 
@@ -49,7 +49,7 @@ export default function SearchInput({setResult}) {
         break;
       case 'Enter':
         if (Number.isInteger(selectedIndex)) {
-          return selectResult(results[selectedIndex]);
+          return selectFeature(features[selectedIndex]);
         }
         break;
       case 'ArrowUp':
@@ -59,7 +59,7 @@ export default function SearchInput({setResult}) {
           Number.isInteger(prevSelectedIndex)
             ? Math.max(
                 0,
-                Math.min(results.length - 1, prevSelectedIndex + direction)
+                Math.min(features.length - 1, prevSelectedIndex + direction)
               )
             : 0
         );
@@ -104,7 +104,7 @@ export default function SearchInput({setResult}) {
           <Spinner size="small" />
         </Box>
       )}
-      {focus && value && results.length > 0 && (
+      {focus && value && features.length > 0 && (
         <List
           py="4"
           position="absolute"
@@ -117,21 +117,21 @@ export default function SearchInput({setResult}) {
           boxShadow="xl"
           onMouseDown={event => event.preventDefault()}
         >
-          {results.map((result, index) => (
+          {features.map((feature, index) => (
             <ListItem
-              key={result.id}
+              key={feature.id}
               px="6"
               py="2"
               lineHeight="short"
-              onClick={() => selectResult(result)}
+              onClick={() => selectFeature(feature)}
               bg={index === selectedIndex && 'gray.50'}
               onMouseEnter={() => setSelectedIndex(index)}
               onMouseLeave={() => setSelectedIndex(null)}
             >
-              <Text>{result.text}</Text>
-              {result.context.length > 0 && (
+              <Text>{feature.text}</Text>
+              {feature.context.length > 0 && (
                 <Text fontSize="sm" color="gray.500">
-                  {result.context[0].text}
+                  {feature.context[0].text}
                 </Text>
               )}
             </ListItem>
@@ -143,5 +143,5 @@ export default function SearchInput({setResult}) {
 }
 
 SearchInput.propTypes = {
-  setResult: PropTypes.func.isRequired
+  setFeature: PropTypes.func.isRequired
 };

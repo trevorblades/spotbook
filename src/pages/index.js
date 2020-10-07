@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import SearchInput from '../components/SearchInput';
 import SpotMap from '../components/SpotMap';
-import {Box, Button, Flex, Grid, Heading} from '@chakra-ui/core';
+import {Box, Button, Flex, Heading} from '@chakra-ui/core';
 import {FiPlus} from 'react-icons/fi';
 import {Helmet} from 'react-helmet';
 
 export default function App() {
-  const [result, setResult] = useState(null);
+  const [feature, setFeature] = useState(null);
   return (
     <>
       <Helmet title="Spothub">
@@ -20,7 +20,7 @@ export default function App() {
           <Heading mr="6" fontSize="3xl">
             📍 Spothub
           </Heading>
-          <SearchInput setResult={setResult} />
+          <SearchInput setFeature={setFeature} />
           <Button
             ml="auto"
             borderRadius="lg"
@@ -30,31 +30,7 @@ export default function App() {
             Add spot
           </Button>
         </Flex>
-        {result && (
-          <Grid flexGrow="1" templateColumns="1fr 2fr">
-            {/* <chakra.aside
-              bg="white"
-              boxShadow="lg"
-              position="relative"
-              zIndex="docked"
-            >
-              <Flex align="center" as="header" h="12" px="4">
-                <Heading fontSize="2xl">📍 Spothub</Heading>
-                <Button
-                  ml="auto"
-                  size="sm"
-                  colorScheme="red"
-                  leftIcon={<Box as={FiPlus} fontSize="md" />}
-                >
-                  Add spot
-            </Button>
-              </Flex>
-              <SpotList />
-            </chakra.aside> */}
-            <aside />
-            <SpotMap center={result.center} />
-          </Grid>
-        )}
+        {feature && <SpotMap center={feature.center} />}
       </Flex>
     </>
   );

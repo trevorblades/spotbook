@@ -12,6 +12,7 @@
     "react-firebase-hooks": "^2.2.0",
     "react-helmet": "^6.1.0",
     "react-icons": "^3.11.0",
+    "react-use": "^15.3.4",
     "use-debounce": "^5.0.1"
   },
   "devDependencies": {
