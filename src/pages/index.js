@@ -20,7 +20,7 @@ export default function App() {
           <Heading mr="6" fontSize="3xl">
             📍 Spothub
           </Heading>
-          <SearchInput onResultClick={setResult} />
+          <SearchInput setResult={setResult} />
           <Button
             ml="auto"
             borderRadius="lg"

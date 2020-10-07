@@ -4,7 +4,7 @@ import querystring from 'querystring';
 import {Box, List, ListItem, Spinner, Text, chakra} from '@chakra-ui/core';
 import {useDebounce} from 'use-debounce';
 
-export default function SearchInput({onResultClick}) {
+export default function SearchInput({setResult}) {
   const input = useRef();
   const [value, setValue] = useState('');
   const [focus, setFocus] = useState(false);
@@ -36,6 +36,39 @@ export default function SearchInput({onResultClick}) {
     }
   }, [debounced]);
 
+  function selectResult(result) {
+    setValue(result.text);
+    setResult(result);
+    input.current.blur();
+  }
+
+  function handleKeyDown(event) {
+    switch (event.key) {
+      case 'Escape':
+        setValue('');
+        break;
+      case 'Enter':
+        if (Number.isInteger(selectedIndex)) {
+          return selectResult(results[selectedIndex]);
+        }
+        break;
+      case 'ArrowUp':
+      case 'ArrowDown': {
+        const direction = event.key === 'ArrowUp' ? -1 : 1;
+        setSelectedIndex(prevSelectedIndex =>
+          Number.isInteger(prevSelectedIndex)
+            ? Math.max(
+                0,
+                Math.min(results.length - 1, prevSelectedIndex + direction)
+              )
+            : 0
+        );
+        break;
+      }
+      default:
+    }
+  }
+
   return (
     <Box w="300px" position="relative">
       <chakra.input
@@ -57,30 +90,7 @@ export default function SearchInput({onResultClick}) {
           setSelectedIndex(0);
         }}
         onBlur={() => setFocus(false)}
-        onKeyDown={event => {
-          switch (event.key) {
-            case 'Escape':
-              setValue('');
-              break;
-            case 'ArrowUp':
-            case 'ArrowDown': {
-              const direction = event.key === 'ArrowUp' ? -1 : 1;
-              setSelectedIndex(prevSelectedIndex => {
-                return Number.isInteger(prevSelectedIndex)
-                  ? Math.max(
-                      0,
-                      Math.min(
-                        results.length - 1,
-                        prevSelectedIndex + direction
-                      )
-                    )
-                  : 0;
-              });
-              break;
-            }
-            default:
-          }
-        }}
+        onKeyDown={handleKeyDown}
         value={value}
         onChange={event => setValue(event.target.value)}
       />
@@ -113,11 +123,7 @@ export default function SearchInput({onResultClick}) {
               px="6"
               py="2"
               lineHeight="short"
-              onClick={() => {
-                setValue(result.text);
-                onResultClick(result);
-                input.current.blur();
-              }}
+              onClick={() => selectResult(result)}
               bg={index === selectedIndex && 'gray.50'}
               onMouseEnter={() => setSelectedIndex(index)}
               onMouseLeave={() => setSelectedIndex(null)}
@@ -137,5 +143,5 @@ export default function SearchInput({onResultClick}) {
 }
 
 SearchInput.propTypes = {
-  onResultClick: PropTypes.func.isRequired
+  setResult: PropTypes.func.isRequired
 };
