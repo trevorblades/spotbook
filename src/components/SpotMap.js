@@ -1,21 +1,22 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
+import PropTypes from 'prop-types';
 import React, {useEffect, useRef} from 'react';
 import mapboxgl from 'mapbox-gl';
 import {Box} from '@chakra-ui/core';
 
-export default function SpotMap() {
+export default function SpotMap({center}) {
   const map = useRef();
   const mapContainer = useRef();
 
   useEffect(() => {
-    mapboxgl.accessToken = process.env.GATSBY_MAPBOX_ACCESS_TOKEN;
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [-118.2437, 34.0522],
-      zoom: 10
+      center,
+      zoom: 10,
+      accessToken: process.env.GATSBY_MAPBOX_ACCESS_TOKEN
     });
-  }, []);
+  }, [center]);
 
   return (
     <Box
@@ -29,3 +30,7 @@ export default function SpotMap() {
     />
   );
 }
+
+SpotMap.propTypes = {
+  center: PropTypes.array.isRequired
+};

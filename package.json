@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "@chakra-ui/core": "^1.0.0-rc.5",
-    "@mapbox/mapbox-gl-geocoder": "^4.7.0",
     "firebase": "^7.22.1",
     "gatsby": "^2.24.67",
     "gatsby-plugin-chakra-ui": "^1.0.0-rc.5",
