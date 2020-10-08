@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import querystring from 'querystring';
 import {Box, List, ListItem, Spinner, Text, chakra} from '@chakra-ui/core';
 import {useDebounce} from 'use-debounce';
 
-export default function SearchInput({setFeature}) {
-  const input = useRef();
-  const [value, setValue] = useState('');
+export default function SearchInput({inputRef, value, onChange, onSelect}) {
   const [focus, setFocus] = useState(false);
   const [searching, setSearching] = useState(false);
   const [features, setFeatures] = useState([]);
@@ -36,35 +34,28 @@ export default function SearchInput({setFeature}) {
     }
   }, [debounced]);
 
-  function selectFeature(feature) {
-    setValue(feature.text);
-    setFeature(feature);
-    input.current.blur();
-  }
-
-  function handleKeyDown(event) {
-    switch (event.key) {
+  function handleKeyDown({key}) {
+    switch (key) {
       case 'Escape':
-        setValue('');
+        onChange('');
         break;
       case 'Enter':
         if (Number.isInteger(selectedIndex)) {
-          return selectFeature(features[selectedIndex]);
+          onSelect(features[selectedIndex]);
         }
         break;
       case 'ArrowUp':
-      case 'ArrowDown': {
-        const direction = event.key === 'ArrowUp' ? -1 : 1;
-        setSelectedIndex(prevSelectedIndex =>
-          Number.isInteger(prevSelectedIndex)
+      case 'ArrowDown':
+        setSelectedIndex(prevSelectedIndex => {
+          const direction = key === 'ArrowUp' ? -1 : 1;
+          return Number.isInteger(prevSelectedIndex)
             ? Math.max(
                 0,
                 Math.min(features.length - 1, prevSelectedIndex + direction)
               )
-            : 0
-        );
+            : 0;
+        });
         break;
-      }
       default:
     }
   }
@@ -84,7 +75,7 @@ export default function SearchInput({setFeature}) {
         fontSize="lg"
         outline="none"
         placeholder="Search for a location"
-        ref={input}
+        ref={inputRef}
         onFocus={() => {
           setFocus(true);
           setSelectedIndex(0);
@@ -92,7 +83,7 @@ export default function SearchInput({setFeature}) {
         onBlur={() => setFocus(false)}
         onKeyDown={handleKeyDown}
         value={value}
-        onChange={event => setValue(event.target.value)}
+        onChange={event => onChange(event.target.value)}
       />
       {searching && (
         <Box
@@ -123,7 +114,7 @@ export default function SearchInput({setFeature}) {
               px="6"
               py="2"
               lineHeight="short"
-              onClick={() => selectFeature(feature)}
+              onClick={() => onSelect(feature)}
               bg={index === selectedIndex && 'gray.50'}
               onMouseEnter={() => setSelectedIndex(index)}
               onMouseLeave={() => setSelectedIndex(null)}
@@ -143,5 +134,8 @@ export default function SearchInput({setFeature}) {
 }
 
 SearchInput.propTypes = {
-  setFeature: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+  inputRef: PropTypes.object.isRequired
 };
