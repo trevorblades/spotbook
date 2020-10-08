@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 import React, {useEffect, useState} from 'react';
 import querystring from 'querystring';
-import {Box, List, ListItem, Spinner, Text, chakra} from '@chakra-ui/core';
+import {Box, List, ListItem, Text, chakra} from '@chakra-ui/core';
 import {useDebounce} from 'use-debounce';
 
 export default function SearchInput({inputRef, value, onChange, onSelect}) {
   const [focus, setFocus] = useState(false);
-  const [searching, setSearching] = useState(false);
   const [features, setFeatures] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [debounced] = useDebounce(value, 500);
@@ -19,13 +18,11 @@ export default function SearchInput({inputRef, value, onChange, onSelect}) {
         types: ['district', 'place', 'locality', 'neighborhood']
       });
 
-      setSearching(true);
       fetch(
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?${params}`
       )
         .then(response => response.json())
         .then(data => {
-          setSearching(false);
           setFeatures(data.features);
           setSelectedIndex(0);
         });
@@ -85,16 +82,6 @@ export default function SearchInput({inputRef, value, onChange, onSelect}) {
         value={value}
         onChange={event => onChange(event.target.value)}
       />
-      {searching && (
-        <Box
-          right="4"
-          top="50%"
-          transform="translateY(-50%)"
-          position="absolute"
-        >
-          <Spinner size="small" />
-        </Box>
-      )}
       {focus && value && features.length > 0 && (
         <List
           py="4"

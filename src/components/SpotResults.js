@@ -9,7 +9,7 @@ export default function SpotResults({center}) {
   const [bounds, setBounds] = useState(null);
   return (
     <Grid flexGrow="1" templateColumns="1fr 2fr">
-      <chakra.aside>
+      <chakra.aside px="6" py="4">
         {bounds ? (
           <SpotList mapRef={map} bounds={bounds} />
         ) : (
